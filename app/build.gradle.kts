@@ -45,4 +45,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation("com.airbnb.android:lottie:4.0.0")
+    implementation ("androidx.biometric:biometric:1.1.0")
 }
