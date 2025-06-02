@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel.authResult.observe(this) { success ->
             if (success) {
-                startActivity(Intent(this, RegisterActivity::class.java))
+                startActivity(Intent(this, HomeActivity::class.java))
                 finish()
             }
         }
