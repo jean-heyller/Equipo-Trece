@@ -1,15 +1,15 @@
-package com.example.dogapp.view.repository
+package com.example.dogapp.repository
 
 import android.content.Context
 import com.example.dogapp.R
-import com.example.dogapp.view.webservice.ApiUtils
+import com.example.dogapp.service.ApiUtils
 
 class DogsRepository( val context: Context) {
     private val apiService = ApiUtils.getApiDogService()
 
     suspend fun getAllBreeds(): List<String> {
         return try {
-            val response = apiService.getAllBreeds()
+            val response = apiService.getBreeds()
             response.message.keys.toList()
         } catch (e: Exception) {
             e.printStackTrace()

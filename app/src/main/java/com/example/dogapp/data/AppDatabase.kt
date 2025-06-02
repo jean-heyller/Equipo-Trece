@@ -27,12 +27,6 @@ abstract class AppDatabase : RoomDatabase() {
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            scope.launch {
-                                getDatabase(context, scope).citaDao().insertAll(
-                                    CitaEntity(nombreMascota = "Rocky", sintoma = "Fiebre", raza = "hound", imagenUrl = ""),
-                                    CitaEntity(nombreMascota = "Luna", sintoma = "Dolor de pata", raza = "beagle", imagenUrl = "")
-                                )
-                            }
                         }
                     })
                     .build()

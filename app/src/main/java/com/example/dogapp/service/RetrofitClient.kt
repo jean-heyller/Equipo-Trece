@@ -1,6 +1,6 @@
-package com.example.dogapp.view.webservice
+package com.example.dogapp.service
 
-import com.example.dogapp.view.utils.Constants.BASE_URL
+import com.example.dogapp.utils.Constants.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
