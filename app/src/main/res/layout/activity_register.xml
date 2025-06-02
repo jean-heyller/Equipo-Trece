@@ -16,23 +16,20 @@
         android:id="@+id/til_nombre_mascota"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:hint="@string/nombre_de_la_mascota"
-        app:boxStrokeColor="@color/purple_500"
-        app:hintTextColor="@color/purple_500"
         app:layout_constraintTop_toBottomOf="@id/toolbar_custom"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        style="@style/CustomTextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_nombre_mascota"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:maxLines="1" />
+            android:maxLength="15"
+            style="@style/CustomTextInputEditText"
+            />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,6 +42,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:hint="@string/raza"
+        android:textColorHint="@color/hint_gray"
         app:boxStrokeColor="@color/purple_500"
         app:hintTextColor="@color/purple_500"
         app:layout_constraintTop_toBottomOf="@id/til_nombre_mascota"
@@ -56,8 +54,9 @@
             android:id="@+id/act_raza"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none"
-            android:maxLines="1" />
+            android:inputType="text"
+            android:labelFor="@+id/act_raza"
+            style="@style/CustomTextInputEditText" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -66,23 +65,19 @@
         android:id="@+id/til_nombre_propietario"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:hint="@string/nombre_del_propietario"
-        app:boxStrokeColor="@color/purple_500"
-        app:hintTextColor="@color/purple_500"
         app:layout_constraintTop_toBottomOf="@id/til_raza"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        style="@style/CustomTextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_nombre_propietario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:maxLines="1" />
+            android:maxLength="30"
+            style="@style/CustomTextInputEditText"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -91,23 +86,19 @@
         android:id="@+id/til_telefono"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
         android:hint="@string/tel_fono"
-        app:boxStrokeColor="@color/purple_500"
-        app:hintTextColor="@color/purple_500"
         app:layout_constraintTop_toBottomOf="@id/til_nombre_propietario"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        style="@style/CustomTextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_telefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
-            android:maxLines="1" />
+            android:maxLength="10"
+            style="@style/CustomTextInputEditText"/>
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -119,6 +110,8 @@
         android:layout_marginStart="32dp"
         android:layout_marginEnd="168dp"
         android:hint="@string/s_ntomas"
+        android:textColorHint="@color/hint_gray"
+        android:textColor="@color/black"
         android:background="@drawable/spinner_background"
         android:paddingStart="16dp"
         android:paddingEnd="40dp"
