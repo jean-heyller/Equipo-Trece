@@ -16,13 +16,11 @@ import com.example.dogapp.repository.CitaRepository
 import com.example.dogapp.view.adapter.CitaAdapter
 import com.example.dogapp.viewmodel.HomeViewModel
 import com.example.dogapp.R
-import com.example.dogapp.service.ApiUtils
 
 class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-    private val apiService = ApiUtils.getApiDogService()
     private lateinit var adapter: CitaAdapter
     private lateinit var viewModel: HomeViewModel
 
@@ -43,7 +41,6 @@ class HomeFragment : Fragment() {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                 return HomeViewModel(
                     citaRepository,
-                    apiService
                 ) as T
             }
         })[HomeViewModel::class.java]

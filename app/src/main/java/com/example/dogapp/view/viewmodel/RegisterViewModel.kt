@@ -21,6 +21,9 @@ class RegisterViewModel(application: Application, private val citaRepository: Ci
     private val _symptoms = MutableLiveData<List<String>>()
     val symptoms: LiveData<List<String>> get() = _symptoms
 
+    private val _citaGuardada = MutableLiveData<Boolean>()
+    val citaGuardada: LiveData<Boolean> get() = _citaGuardada
+
     init {
         fetchBreeds()
         fetchSymptoms()
@@ -30,8 +33,9 @@ class RegisterViewModel(application: Application, private val citaRepository: Ci
         viewModelScope.launch {
             try {
                 _breeds.value = repository.getAllBreeds()
-            } catch (e: Exception) {
+            } catch ( e: Exception) {
                 _breeds.value = emptyList()
+                e.printStackTrace()
             }
         }
     }
@@ -40,17 +44,25 @@ class RegisterViewModel(application: Application, private val citaRepository: Ci
     }
 
     fun saveCita(cita: Cita) {
-        val citaEntity = CitaEntity(
-            nombreMascota = cita.nombreMascota,
-            nombrePropietario = cita.nombrePropietario,
-            sintoma = cita.sintoma,
-            raza = cita.raza,
-            telefono = cita.telefono,
-            imagenUrl = cita.urlImagen ?: "" // Aseguramos que la URL no sea nula
-        )
-
         viewModelScope.launch {
-            citaRepository.insertCita(citaEntity)
+            try {
+                val imagenUrl = repository.getBreedImage(cita.raza).toString()
+
+                val citaEntity = CitaEntity(
+                    nombreMascota = cita.nombreMascota,
+                    nombrePropietario = cita.nombrePropietario,
+                    sintoma = cita.sintoma,
+                    raza = cita.raza,
+                    telefono = cita.telefono,
+                    imagenUrl = imagenUrl
+                )
+
+                citaRepository.insertCita(citaEntity)
+                _citaGuardada.postValue(true)
+
+            } catch (e: Exception) {
+                println(e)
+            }
         }
     }
 

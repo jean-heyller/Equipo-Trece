@@ -108,7 +108,6 @@ class NewDateFragment : Fragment() {
             val sintomasSeleccionado = binding.actSintomas.text.toString().trim()
 
             if (sintomasSeleccionado.isEmpty()) {
-                // Mostrar mensaje emergente
                 android.app.AlertDialog.Builder(requireContext())
                     .setTitle("Atención")
                     .setMessage("Selecciona un síntoma")
@@ -123,7 +122,11 @@ class NewDateFragment : Fragment() {
                     sintoma = sintomasSeleccionado
                 )
                 viewModel.saveCita(cita)
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                viewModel.citaGuardada.observe(viewLifecycleOwner) { guardada ->
+                    if (guardada == true) {
+                        requireActivity().onBackPressedDispatcher.onBackPressed()
+                    }
+                }
             }
         }
     }
@@ -144,11 +147,9 @@ class NewDateFragment : Fragment() {
         if (allFieldsFilled) {
             binding.btnGuardarCita.setEnabled(true)
             binding.btnGuardarCita.setTypeface(null, android.graphics.Typeface.BOLD)
-            binding.btnGuardarCita.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red_button))
+            binding.btnGuardarCita.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         } else {
             binding.btnGuardarCita.setEnabled(false)
-            binding.btnGuardarCita.setTypeface(null, android.graphics.Typeface.NORMAL)
-            binding.btnGuardarCita.setBackgroundColor(android.graphics.Color.GRAY)
         }
     }
 

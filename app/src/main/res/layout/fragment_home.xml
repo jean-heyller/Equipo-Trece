@@ -11,8 +11,7 @@
     <include
         android:id="@+id/ic_contentMenu"
         layout="@layout/header_home"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCitas"
@@ -31,7 +30,7 @@
         android:layout_width="56dp"
         android:layout_height="56dp"
         android:src="@drawable/ic_add"
-        android:contentDescription="+"
+        android:contentDescription="@string/agregar_cita"
         app:backgroundTint="#EF5860"
         app:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
