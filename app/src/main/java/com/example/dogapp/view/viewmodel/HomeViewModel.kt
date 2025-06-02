@@ -17,14 +17,12 @@ class HomeViewModel(
     fun cargarCitas() {
         viewModelScope.launch {
             val citaEntities = citaRepository.getCitas()
-            // Agrega este log para ver cuántas citas hay
-            println("Citas en BD: ${citaEntities.size}")
             val citas = citaEntities.map { entity ->
                 val url = if (entity.imagenUrl.isNullOrEmpty()) {
                     try {
                         dogApiService.getBreedImage(entity.raza).message
                     } catch (e: Exception) {
-                        "" // O un placeholder si falla
+                        ""
                     }
                 } else {
                     entity.imagenUrl

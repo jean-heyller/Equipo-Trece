@@ -4,9 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dogapp.databinding.FragmentHomeBinding
 import com.example.dogapp.data.AppDatabase
@@ -14,6 +16,7 @@ import com.example.dogapp.repository.CitaRepository
 import com.example.dogapp.service.RetrofitInstance
 import com.example.dogapp.view.adapter.CitaAdapter
 import com.example.dogapp.viewmodel.HomeViewModel
+import com.example.dogapp.R
 
 class HomeFragment : Fragment() {
 
@@ -39,22 +42,23 @@ class HomeFragment : Fragment() {
             override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
                 return HomeViewModel(
                     citaRepository,
-                    RetrofitInstance.api // Aquí pasas el DogApiService
+                    RetrofitInstance.api
                 ) as T
             }
         })[HomeViewModel::class.java]
 
         adapter = CitaAdapter { cita ->
-            // Navegar al detalle de la cita (HU 4.0)
-            // findNavController().navigate(R.id.action_home_to_detalle, bundleOf("citaId" to cita.id))
+            findNavController().navigate(
+                R.id.action_homeFragment_to_detalleFragment,
+                bundleOf("citaId" to cita.id)
+            )
         }
 
         binding.rvCitas.layoutManager = LinearLayoutManager(requireContext())
         binding.rvCitas.adapter = adapter
 
         binding.fabAdd.setOnClickListener {
-            // Navegar a la ventana Nueva Cita (HU 3.0)
-            // findNavController().navigate(R.id.action_home_to_nuevaCita)
+            findNavController().navigate(R.id.action_homeFragment_to_newDateFragment)
         }
 
         viewModel.citas.observe(viewLifecycleOwner) { citas ->

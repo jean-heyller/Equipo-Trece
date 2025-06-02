@@ -27,7 +27,6 @@ abstract class AppDatabase : RoomDatabase() {
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
-                            // Mockear datos al crear la base de datos
                             scope.launch {
                                 getDatabase(context, scope).citaDao().insertAll(
                                     CitaEntity(nombreMascota = "Rocky", sintoma = "Fiebre", raza = "hound", imagenUrl = ""),

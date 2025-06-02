@@ -26,14 +26,13 @@ class CitaAdapter(
 
     inner class CitaViewHolder(private val binding: ItemCitaBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(cita: Cita) {
-            Log.d("CitaAdapter", "Binding Cita: ${cita.urlImagen}")
             binding.tvNombreMascota.text = cita.nombreMascota
             binding.tvSintoma.text = cita.sintoma
-            binding.tvTurno.text = cita.id.toString()
+            binding.tvTurno.text = "# " + cita.id.toString()
             Glide.with(binding.root.context)
                 .load(cita.urlImagen)
                 .placeholder(R.drawable.dog)
-                .circleCrop() // Esto recorta la imagen en círculo
+                .circleCrop()
                 .into(binding.imgMascota)
             binding.root.setOnClickListener { onItemClick(cita) }
         }
