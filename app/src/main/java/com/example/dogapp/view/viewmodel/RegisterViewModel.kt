@@ -5,7 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.dogapp.utils.mappers.toEntity
+import com.example.dogapp.data.entity.CitaEntity
+
 import com.example.dogapp.model.Cita
 import com.example.dogapp.repository.CitaRepository
 import com.example.dogapp.repository.DogsRepository
@@ -39,8 +40,17 @@ class RegisterViewModel(application: Application, private val citaRepository: Ci
     }
 
     fun saveCita(cita: Cita) {
+        val citaEntity = CitaEntity(
+            nombreMascota = cita.nombreMascota,
+            nombrePropietario = cita.nombrePropietario,
+            sintoma = cita.sintoma,
+            raza = cita.raza,
+            telefono = cita.telefono,
+            imagenUrl = cita.urlImagen ?: "" // Aseguramos que la URL no sea nula
+        )
+
         viewModelScope.launch {
-            citaRepository.insertCita(cita.toEntity())
+            citaRepository.insertCita(citaEntity)
         }
     }
 

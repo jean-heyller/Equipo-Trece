@@ -8,9 +8,8 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.dogapp.data.dao.CitaDao
 import com.example.dogapp.data.entity.CitaEntity
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
-@Database(entities = [CitaEntity::class], version = 1)
+@Database(entities = [CitaEntity::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun citaDao(): CitaDao
 
@@ -24,6 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "dogapp_db"
                 )
+                    .fallbackToDestructiveMigration() // Esta línea permite migraciones destructivas
                     .addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
