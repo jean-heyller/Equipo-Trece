@@ -2,12 +2,9 @@ package com.example.dogapp.view
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.airbnb.lottie.LottieAnimationView
 import com.example.dogapp.R
@@ -30,7 +27,8 @@ class LoginActivity : AppCompatActivity() {
 
         viewModel.authResult.observe(this) { success ->
             if (success) {
-                startActivity(Intent(this, HomeActivity::class.java))
+                // Cambia HomeActivity por MainActivity
+                startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
         }
