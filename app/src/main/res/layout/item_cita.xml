@@ -19,6 +19,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             android:scaleType="centerCrop"
+            android:contentDescription="@string/dog_head"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -39,7 +40,8 @@
                 android:id="@+id/tvNombreMascota"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nombre Mascota"
+                android:textColor="@color/black"
+                android:text="@string/nombre_de_la_mascota"
                 android:textStyle="bold"
                 android:textSize="16sp"/>
 
@@ -47,7 +49,8 @@
                 android:id="@+id/tvSintoma"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Síntoma"
+                android:textColor="@color/black"
+                android:text="@string/s_ntomas"
                 android:textSize="14sp"/>
         </LinearLayout>
 
@@ -55,7 +58,7 @@
             android:id="@+id/tvTurno"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="ID"
+            android:text="@string/id"
             android:textStyle="bold"
             android:textColor="#EF5860"
             app:layout_constraintEnd_toEndOf="parent"

@@ -20,4 +20,8 @@ class DogsRepository( val context: Context) {
     fun getSymptoms(): List<String> {
         return context.resources.getStringArray(R.array.sintomas).toList()
     }
+
+    suspend fun getBreedImage(breed: String): String {
+        return apiService.getBreedImage(breed).message
+    }
 }
