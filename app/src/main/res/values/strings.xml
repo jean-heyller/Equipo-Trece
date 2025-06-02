@@ -7,4 +7,7 @@
     <string name="raza">Raza</string>
     <string name="nombre_de_la_mascota">Nombre de la mascota</string>
     <string name="s_ntomas">Síntomas</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="header_title">Administrador&#10;de citas</string>
+    <string name="dogapp_title">DogApp</string>
 </resources>

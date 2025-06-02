@@ -11,4 +11,6 @@
     <color name="purple_500">#9C27B0</color>
     <color name="red_button">#F05861</color>
     <color name="hint_gray">#808080</color>
+    <color name="background_general">#23272A</color>
+
 </resources>
