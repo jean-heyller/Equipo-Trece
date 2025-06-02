@@ -30,7 +30,10 @@ class HomeViewModel(
                 Cita(
                     id = entity.id,
                     nombreMascota = entity.nombreMascota,
+                    raza = entity.raza,
+                    nombrePropietario = entity.nombrePropietario,
                     sintoma = entity.sintoma,
+                    telefono = entity.telefono,
                     urlImagen = url
                 )
             }

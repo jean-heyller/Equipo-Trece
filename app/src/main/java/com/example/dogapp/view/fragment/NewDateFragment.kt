@@ -5,56 +5,160 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import androidx.core.content.ContextCompat
+import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.dogapp.R
+import com.example.dogapp.data.AppDatabase
+import com.example.dogapp.databinding.FragmentNewDateBinding
+import com.example.dogapp.model.Cita
+import com.example.dogapp.repository.CitaRepository
+import com.example.dogapp.service.ApiUtils
+import com.example.dogapp.view.viewmodel.RegisterViewModel
+import com.example.dogapp.viewmodel.HomeViewModel
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [NewDateFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class NewDateFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    private var _binding: FragmentNewDateBinding? = null
+    private val binding get() = _binding!!
+    private val apiService = ApiUtils.getApiDogService()
+    private lateinit var viewModel: RegisterViewModel
+
+    companion object {
+        private const val TOOLBAR_TITLE = "Nueva Cita"
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_new_date, container, false)
+    ): View {
+        _binding = FragmentNewDateBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment NewDateFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            NewDateFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val db = AppDatabase.getDatabase(requireContext(), viewLifecycleOwner.lifecycleScope)
+        val citaRepository = CitaRepository(db.citaDao())
+
+        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : androidx.lifecycle.ViewModel> create(modelClass: Class<T>): T {
+                return HomeViewModel(
+                    citaRepository,
+                    apiService
+                ) as T
             }
+        })[RegisterViewModel::class.java]
+
+        binding.toolbarCustom.toolbarTitle.text = TOOLBAR_TITLE
+        binding.toolbarCustom.btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        setupAutoCompleteTextViews()
+        setupInputListeners()
+        setupSaveButton()
     }
+
+    private fun setupInputListeners() {
+        val editTexts = listOf(
+            binding.etNombreMascota,
+            binding.etNombrePropietario,
+            binding.etTelefono
+        )
+
+        editTexts.forEach { editText ->
+            editText.addTextChangedListener { validateForm() }
+        }
+
+        binding.actRaza.setOnItemClickListener { _, _, _, _ ->
+            validateForm()
+        }
+
+        binding.actSintomas.setOnItemClickListener { _, _, _, _ ->
+            validateForm()
+        }
+    }
+
+    private fun setupAutoCompleteTextViews() {
+        viewModel.breeds.observe(viewLifecycleOwner) { breeds ->
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                breeds
+            )
+            binding.actRaza.setAdapter(adapter)
+            binding.actRaza.threshold = 2
+        }
+
+        viewModel.symptoms.observe(viewLifecycleOwner) { symptoms ->
+            val adapter = ArrayAdapter(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                symptoms
+            )
+            binding.actSintomas.setAdapter(adapter)
+            binding.actSintomas.setOnClickListener {
+                binding.actSintomas.showDropDown()
+            }
+        }
+    }
+
+    private fun setupSaveButton() {
+        binding.btnGuardarCita.setOnClickListener {
+            val sintomasSeleccionado = binding.actSintomas.text.toString().trim()
+
+            if (sintomasSeleccionado.isEmpty()) {
+                // Mostrar mensaje emergente
+                android.app.AlertDialog.Builder(requireContext())
+                    .setTitle("Atención")
+                    .setMessage("Selecciona un síntoma")
+                    .setPositiveButton("OK", null)
+                    .show()
+            } else {
+                val cita = Cita(
+                    nombreMascota = binding.etNombreMascota.text.toString().trim(),
+                    nombrePropietario = binding.etNombrePropietario.text.toString().trim(),
+                    raza = binding.actRaza.text.toString().trim(),
+                    telefono = binding.etTelefono.text.toString().trim(),
+                    sintoma = sintomasSeleccionado
+                )
+                viewModel.saveCita(cita)
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            }
+        }
+    }
+
+    private fun validateForm() {
+        val nombreMascota = binding.etNombreMascota.text.toString().trim()
+        val raza = binding.actRaza.text.toString().trim()
+        val nombrePropietario = binding.etNombrePropietario.text.toString().trim()
+        val telefono = binding.etTelefono.text.toString().trim()
+
+        val allFieldsFilled = nombreMascota.isNotEmpty() &&
+                raza.isNotEmpty() &&
+                nombrePropietario.isNotEmpty() &&
+                telefono.isNotEmpty()
+
+        binding.btnGuardarCita.isEnabled = allFieldsFilled
+
+        if (allFieldsFilled) {
+            binding.btnGuardarCita.setEnabled(true)
+            binding.btnGuardarCita.setTypeface(null, android.graphics.Typeface.BOLD)
+            binding.btnGuardarCita.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red_button))
+        } else {
+            binding.btnGuardarCita.setEnabled(false)
+            binding.btnGuardarCita.setTypeface(null, android.graphics.Typeface.NORMAL)
+            binding.btnGuardarCita.setBackgroundColor(android.graphics.Color.GRAY)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
 }

@@ -1,14 +1,15 @@
 package com.example.dogapp.service
 
+import com.example.dogapp.utils.Constants.BASE_URL
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-object RetrofitInstance {
-    val api: DogApiService by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://dog.ceo/api/")
+object RetrofitClient {
+    fun getRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(DogApiService::class.java)
     }
+
 }
