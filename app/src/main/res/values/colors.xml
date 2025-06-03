@@ -3,7 +3,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 <!--    Toolbar -->
-    <color name="toolbar_background_color">#2D2D2D</color>
+    <color name="toolbar_background_color">#23272A</color>
     <color name="toolbar_icon_color">#F05861</color>
     <color name="toolbar_border_color">#404040</color>
     <color name="toolbar_text_color">#FFFFFF</color>
@@ -12,5 +12,6 @@
     <color name="red_button">#F05861</color>
     <color name="hint_gray">#808080</color>
     <color name="background_general">#23272A</color>
+    <color name="background_color">#fff7fe</color>
 
 </resources>

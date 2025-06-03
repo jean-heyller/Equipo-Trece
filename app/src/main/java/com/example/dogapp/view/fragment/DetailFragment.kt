@@ -5,52 +5,95 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.dogapp.R
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+import com.example.dogapp.data.AppDatabase
+import com.example.dogapp.databinding.FragmentDetailBinding
+import com.example.dogapp.repository.CitaRepository
+import com.example.dogapp.utils.Constants.DELETE_DATE
+import com.example.dogapp.utils.Constants.DELETE_MESSAGE
+import com.example.dogapp.utils.Constants.NO
+import com.example.dogapp.utils.Constants.YES
+import com.example.dogapp.view.viewmodel.DetailViewModel
 
 
 class DetailFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private var _binding: FragmentDetailBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var viewModel: DetailViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_detail, container, false)
+        _binding = FragmentDetailBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetalleFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val citaId = requireArguments().getInt("citaId")
+
+        val db = AppDatabase.getDatabase(requireContext(), viewLifecycleOwner.lifecycleScope)
+        val repository = CitaRepository(db.citaDao())
+        viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return DetailViewModel(repository) as T
             }
+        })[DetailViewModel::class.java]
+
+        binding.toolbarCustom.btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        viewModel.cita.observe(viewLifecycleOwner) { cita ->
+            binding.toolbarCustom.toolbarTitle.text = cita.nombreMascota
+            binding.tvTurno.text = "#${cita.id}"
+            binding.tvRaza.text = cita.raza
+            binding.tvSintoma.text = cita.sintoma
+            binding.tvPropietario.text = "Propietario: ${cita.nombrePropietario}"
+            binding.tvTelefono.text = "Teléfono: ${cita.telefono}"
+            Glide.with(requireContext())
+                .load(cita?.urlImagen)
+                .placeholder(R.drawable.dog)
+                .into(binding.imgMascota)
+        }
+
+        viewModel.cargarCitaPorId(citaId)
+
+        setupEliminarCita()
+    }
+
+    fun setupEliminarCita() {
+        binding.fabDelete.setOnClickListener {
+            android.app.AlertDialog.Builder(requireContext())
+                .setTitle(DELETE_DATE)
+                .setMessage(DELETE_MESSAGE)
+                .setPositiveButton(YES) { dialog, _ ->
+                    val citaId = requireArguments().getInt("citaId")
+                    viewModel.eliminarCita(citaId)
+                    viewModel.citaEliminada.observe(viewLifecycleOwner) { eliminada ->
+                        if (eliminada == true) {
+                            requireActivity().onBackPressedDispatcher.onBackPressed()
+                            dialog.dismiss()
+                        }
+                    }
+
+                }
+                .setNegativeButton(NO) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                .show()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
