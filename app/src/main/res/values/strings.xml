@@ -5,6 +5,8 @@
     <string name="dog_title">DogApp</string>
     <string name="tel_fono">Teléfono</string>
     <string name="agregar_cita">Agregar cita</string>
+    <string name="nueva_cita">Nueva cita</string>
+    <string name="imagen_de_la_mascota">Imagen de la mascota</string>
     <string name="nombre_del_propietario">Nombre del propietario</string>
     <string name="raza">Raza</string>
     <string name="nombre_de_la_mascota">Nombre de la mascota</string>
@@ -13,4 +15,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="header_title">Administrador&#10;de citas</string>
     <string name="dogapp_title">DogApp</string>
+    <string name="eliminar_cita">Eliminar cita</string>
+    <string name="editar_cita">Editar cita</string>
+    <string name="volver">Volver atras</string>
 </resources>
