@@ -22,4 +22,6 @@ interface CitaDao {
 
     @Insert
     suspend fun insert(cita: CitaEntity)
+
+
 }
