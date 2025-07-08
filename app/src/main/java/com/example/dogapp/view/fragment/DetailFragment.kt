@@ -67,6 +67,21 @@ class DetailFragment : Fragment() {
         viewModel.cargarCitaPorId(citaId)
 
         setupEliminarCita()
+
+        binding.fabEdit.setOnClickListener {
+            val citaId = requireArguments().getInt("citaId")
+            val bundle = Bundle().apply {
+                putInt("citaId", citaId)
+            }
+
+            val editFragment = EditDateFragment()
+            editFragment.arguments = bundle
+
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.contenedor_general, editFragment)
+                .addToBackStack(null)
+                .commit()
+        }
     }
 
     fun setupEliminarCita() {
