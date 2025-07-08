@@ -3,9 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:enabled="true"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.EditDateFragment">
+    android:background="@color/background_color"
+    tools:context=".view.fragment.EditDateFragment"
+    >
 
     <include
         android:id="@+id/toolbar_custom"
@@ -16,7 +19,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_nombre_mascota"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Nombre de la mascota"
@@ -24,12 +26,14 @@
         app:layout_constraintTop_toBottomOf="@id/toolbar_custom"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp">
+        android:layout_margin="16dp"
+        style="@style/CustomTextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_nombre_mascota"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            style="@style/CustomTextInputEditText"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -60,7 +64,6 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_nombre_propietario"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Nombre del propietario"
@@ -68,17 +71,18 @@
         app:layout_constraintTop_toBottomOf="@id/til_raza"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp">
+        android:layout_margin="16dp"
+        style="@style/CustomTextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_nombre_propietario"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            style="@style/CustomTextInputEditText"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/til_telefono"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="Teléfono"
@@ -86,13 +90,15 @@
         app:layout_constraintTop_toBottomOf="@id/til_nombre_propietario"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_margin="16dp">
+        android:layout_margin="16dp"
+        style="@style/CustomTextInputLayout">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_telefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="phone" />
+            android:inputType="phone"
+            style="@style/CustomTextInputEditText"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Botón Guardar Cita -->
@@ -102,12 +108,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:layout_marginBottom="16dp"
-        android:text="@string/guardar_cita"
+        android:text="@string/editar_cita"
         android:textColor="@android:color/darker_gray"
         android:textSize="16sp"
         android:typeface="normal"
         app:cornerRadius="24dp"
-        app:icon="@drawable/ic_save"
+        app:icon="@android:drawable/ic_menu_edit"
         app:iconGravity="textStart"
         app:iconPadding="8dp"
         app:iconTint="@android:color/darker_gray"
