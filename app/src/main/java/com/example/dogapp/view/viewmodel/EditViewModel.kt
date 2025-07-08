@@ -21,6 +21,9 @@ class EditViewModel(application: Application, private val repository: CitaReposi
     private val _breeds = MutableLiveData<List<String>>()
     val breeds: LiveData<List<String>> get() = _breeds
 
+    // LiveData para notificar al Fragment cuando la actualización ha terminado
+    private val _actualizacionCompleta = MutableLiveData<Boolean>()
+    val actualizacionCompleta: LiveData<Boolean> get() = _actualizacionCompleta
 
     init {
         fetchBreeds()
@@ -53,12 +56,20 @@ class EditViewModel(application: Application, private val repository: CitaReposi
         }
     }
 
-    fun actualizarCita(cita: Cita) {
+    fun actualizarCita(cita: Cita, razaAnterior: String) {
         viewModelScope.launch {
             try {
-                repository.insertarCita(cita)
+                var urlImagen = cita.urlImagen
+                if (cita.raza != razaAnterior) {
+                    // Se usa el operador de safe call (?.) para evitar null pointer exceptions
+                    urlImagen = dogsRepository.getBreedImage(cita.raza)?.toString()
+                }
+                val citaActualizada = cita.copy(urlImagen = urlImagen)
+                repository.insertarCita(citaActualizada)
+                _actualizacionCompleta.postValue(true) // Notifica éxito
             } catch (e: Exception) {
                 Log.e("EditViewModel", "Error al actualizar la cita", e)
+                _actualizacionCompleta.postValue(false) // Notifica error
             }
         }
     }

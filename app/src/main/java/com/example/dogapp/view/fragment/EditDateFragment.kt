@@ -19,8 +19,6 @@ import com.example.dogapp.model.Cita
 import com.example.dogapp.repository.CitaRepository
 import com.example.dogapp.view.viewmodel.EditViewModel
 
-
-
 class EditDateFragment : Fragment() {
 
     private var _binding: FragmentEditBinding? = null
@@ -32,46 +30,53 @@ class EditDateFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentEditBinding.inflate(inflater, container, false)
+        // La configuración de la toolbar se mueve a onViewCreated
         return binding.root
-        binding.toolbarCustom.toolbarTitle.text = "Editar Cita"
-        binding.toolbarCustom.btnBack.setOnClickListener {
-            requireActivity().onBackPressedDispatcher.onBackPressed()
-        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val citaId = requireArguments().getInt("citaId")
-
         val db = AppDatabase.getDatabase(requireContext(), viewLifecycleOwner.lifecycleScope)
         val repository = CitaRepository(db.citaDao())
 
         viewModel = ViewModelProvider(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
                 val application = requireActivity().application
-                return EditViewModel(application,repository) as T
+                return EditViewModel(application, repository) as T
             }
         })[EditViewModel::class.java]
 
         viewModel.cargarCitaPorId(citaId)
 
+        // Configuración de la Toolbar
+        binding.toolbarCustom.toolbarTitle.text = "Editar Cita"
+        binding.toolbarCustom.btnBack.setOnClickListener {
+            requireActivity().onBackPressedDispatcher.onBackPressed()
+        }
+
+        // Observador para los datos de la cita
         viewModel.cita.observe(viewLifecycleOwner) { cita ->
-            binding.toolbarCustom.toolbarTitle.text = "Editar Cita"
-            binding.toolbarCustom.btnBack.setOnClickListener {
-                requireActivity().onBackPressedDispatcher.onBackPressed()
-            }
             binding.etNombreMascota.setText(cita.nombreMascota)
             binding.etRaza.setText(cita.raza)
             binding.etNombrePropietario.setText(cita.nombrePropietario)
             binding.etTelefono.setText(cita.telefono)
         }
 
+        // Observador para el resultado de la actualización
+        viewModel.actualizacionCompleta.observe(viewLifecycleOwner) { completada ->
+            if (completada) {
+                Toast.makeText(requireContext(), "Cita actualizada", Toast.LENGTH_SHORT).show()
+                requireActivity().onBackPressedDispatcher.onBackPressed()
+            } else {
+                Toast.makeText(requireContext(), "Error al actualizar la cita", Toast.LENGTH_SHORT).show()
+            }
+        }
 
+        // Listener del botón Guardar
         binding.btnGuardar.setOnClickListener {
             val citaActual = viewModel.cita.value
-
-
             if (citaActual != null) {
                 val citaEditada = Cita(
                     id = citaId,
@@ -80,21 +85,19 @@ class EditDateFragment : Fragment() {
                     sintoma = citaActual.sintoma,
                     nombrePropietario = binding.etNombrePropietario.text.toString(),
                     telefono = binding.etTelefono.text.toString(),
-                    urlImagen = binding.etRaza.text.toString()
+                    urlImagen = citaActual.urlImagen
                 )
-
-
-                viewModel.actualizarCita(citaEditada)
-
-                Toast.makeText(requireContext(), "Cita actualizada", Toast.LENGTH_SHORT).show()
-                requireActivity().onBackPressedDispatcher.onBackPressed()
+                // Solo se llama a la función de actualizar, la navegación se maneja en el observer
+                viewModel.actualizarCita(citaEditada, citaActual.raza)
             } else {
                 Toast.makeText(requireContext(), "Error: no se pudo cargar la cita", Toast.LENGTH_SHORT).show()
             }
         }
+
         setupAutoCompleteTextViews()
         setupInputListeners()
     }
+
     private fun setupInputListeners() {
         val editTexts = listOf(
             binding.etNombreMascota,
@@ -145,7 +148,6 @@ class EditDateFragment : Fragment() {
             binding.btnGuardar.setTextColor(ContextCompat.getColor(requireContext(), R.color.hint_gray))
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
