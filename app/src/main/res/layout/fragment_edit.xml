@@ -33,6 +33,7 @@
             android:id="@+id/et_nombre_mascota"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="15"
             style="@style/CustomTextInputEditText"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -78,6 +79,7 @@
             android:id="@+id/et_nombre_propietario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:maxLength="30"
             style="@style/CustomTextInputEditText"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -98,6 +100,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="phone"
+            android:maxLength="10"
             style="@style/CustomTextInputEditText"/>
     </com.google.android.material.textfield.TextInputLayout>
 
